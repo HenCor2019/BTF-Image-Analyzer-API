@@ -1,18 +1,20 @@
-import cv2
+from fastapi import FastAPI, UploadFile
 import requests
 import json
 import numpy as np
-from fastapi import FastAPI, UploadFile
+import cv2
+
+app = FastAPI()
+
 
 BASE_URL = "http://localhost:8501/v1/models/brain_tumor_detection:predict"
-app = FastAPI()
 
 
 async def read_image(file: UploadFile):
     contents = await file.read()
     image_decoded = np.fromstring(contents,  np.uint8)
-    img = cv2.imdecode(image_decoded,cv2.IMREAD_UNCHANGED)
-    image = cv2.resize(img, dsize=(240,240), interpolation=cv2.INTER_CUBIC)
+    img = cv2.imdecode(image_decoded, cv2.IMREAD_UNCHANGED)
+    image = cv2.resize(img, dsize=(240, 240), interpolation=cv2.INTER_CUBIC)
     normalized_image = image / 255
 
     return normalized_image
