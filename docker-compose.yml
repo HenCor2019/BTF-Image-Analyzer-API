@@ -6,3 +6,12 @@ services:
     build: .
     ports:
       - 8000:80
+    env_file:
+      - ./.env
+  model:
+    container_name: brain_tumor_detection
+    image: hencor2019/brain_tumor_detection:v0.1.0
+    environment:
+      - PORT=8501
+    depends_on:
+      - app
