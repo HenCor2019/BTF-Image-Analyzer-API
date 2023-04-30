@@ -1,7 +1,8 @@
 # compiled output
 /dist
 /node_modules
-app/__pycache__
+app/**/__pycache__
+.env
 
 # Logs
 logs
