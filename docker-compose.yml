@@ -8,7 +8,7 @@ services:
       dockerfile: Dockerfile
       target: deploy
     volumes:
-      - '.:/usr/src/app'
-      - '/usr/src/app/node_modules'
+      - '.:/app'
+      - '/app/node_modules'
     ports:
       - 3000:3000
