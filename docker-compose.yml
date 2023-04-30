@@ -1,14 +1,8 @@
-version: '3.7'
+version: "3.7"
 
 services:
   app:
     image: bft-image-analyzer
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: deploy
-    volumes:
-      - '.:/app'
-      - '/app/node_modules'
+    build: .
     ports:
-      - 3000:3000
+      - 8000:80
