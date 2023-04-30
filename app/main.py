@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile
+from fastapi import FastAPI, UploadFile, File
 import requests
 import json
 import numpy as np
@@ -26,7 +26,7 @@ async def read_ok():
 
 
 @app.post("/api/v1/analyze")
-async def analyze_image(file: UploadFile):
+async def analyze_image(file: UploadFile = File(...)):
     normalized_image = await read_image(file)
 
     instances = normalized_image.reshape((1,)+normalized_image.shape).tolist()
