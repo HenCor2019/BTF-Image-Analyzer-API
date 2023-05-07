@@ -6,6 +6,8 @@ services:
     build: .
     ports:
       - 8000:80
+    volumes:
+      - ./app/:/code/app
     env_file:
       - ./.env
   model:
@@ -15,3 +17,25 @@ services:
       - PORT=8501
     depends_on:
       - app
+  my_sql:
+    container_name: brain_tumor_detection_database
+    image: mysql:8.0.33-debian
+    cap_add:
+      - SYS_NICE
+    restart: always
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    ports:
+      - ${MYSQL_PORT}:3306
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+  phpmyadmin:
+    container_name: brain_tumor_detection_database_client
+    image: phpmyadmin:5.2.1
+    ports:
+      - 8081:80
+    environment:
+      - PMA_ARBITRARY=1
+    depends_on:
+      - my_sql
