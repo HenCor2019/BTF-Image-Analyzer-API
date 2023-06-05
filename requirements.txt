@@ -12,3 +12,5 @@ email-validator==1.1.2
 mysqlclient==2.0.3
 passlib[bcrypt]==1.7.4
 bcrypt==3.2.0
+sqlalchemy==2.0.14
+sendgrid==6.10.0
