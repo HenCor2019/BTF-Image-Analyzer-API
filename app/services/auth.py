@@ -1,3 +1,4 @@
+from python_http_client import ForbiddenError
 from app.schemas import user as schemas
 from app.models import user as models
 from app.database import get_db
@@ -10,12 +11,17 @@ class AuthService():
 
     def login(self, user: schemas.UserLogin):
         db_user = self.db.query(models.User).filter(models.User.email == user.email).first()
-        print(db_user.password)
-        print(user.password)
         if db_user is None:
             return False
 
         if verify_password(user.password, db_user.password) == False:
             return False
-        
-        return signJWT(db_user.id)
+
+        return signJWT(str(db_user.id))
+
+    def refresh_token(self, id: str):
+        db_user = self.db.query(models.User).filter(models.User.id == int(id)).first()
+        if db_user is None:
+            raise ForbiddenError("Cannot refresh the token")
+
+        return signJWT(str(db_user.id))

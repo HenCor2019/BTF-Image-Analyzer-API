@@ -1,6 +1,6 @@
-from fastapi import FastAPI, Depends
+from fastapi import APIRouter, FastAPI, Depends
 from app.auth.auth_bearer import JWTBearer
-from app.controllers import auth, user, detection 
+from app.controllers import auth, mailer, user, detection
 
 app = FastAPI()
 
@@ -17,3 +17,4 @@ async def protected_route():
 app.include_router(user.router)
 app.include_router(auth.router)
 app.include_router(detection.router)
+app.include_router(mailer.router)
