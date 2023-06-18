@@ -10,39 +10,39 @@ services:
       - ./app/:/code/app
     env_file:
       - ./.env
-  # model:
-  #   container_name: brain_tumor_detection
-  #   image: hencor2019/brain_tumor_detection:v0.3.0
-  #   environment:
-  #     - PORT=8501
-  #   depends_on:
-  #     - app
-  # model_validator:
-  #   container_name: brain_tumor_validator
-  #   image: hencor2019/brain_tumor_validator:v0.0.1
-  #   environment:
-  #     - PORT=8505
-  #   depends_on:
-  #     - app
-  # my_sql:
-  #   container_name: brain_tumor_detection_database
-  #   image: mysql:8.0.33-debian
-  #   cap_add:
-  #     - SYS_NICE
-  #   restart: always
-  #   environment:
-  #     - MYSQL_DATABASE='railway'
-  #     - MYSQL_ROOT_PASSWORD='GMX6dkHxe8knAIM3CM1W'
-  #   ports:
-  #     - 3306:7390
-  #   volumes:
-  #     - ./db:/docker-entrypoint-initdb.d
-  # phpmyadmin:
-  #   container_name: brain_tumor_detection_database_client
-  #   image: phpmyadmin:5.2.1
-  #   ports:
-  #     - 8081:80
-  #   environment:
-  #     - PMA_ARBITRARY=1
-  #   depends_on:
-  #     - my_sql
+  model:
+    container_name: brain_tumor_detection
+    image: hencor2019/brain_tumor_detection:v0.3.0
+    environment:
+      - PORT=8501
+    depends_on:
+      - app
+  model_validator:
+    container_name: brain_tumor_validator
+    image: hencor2019/brain_tumor_validator:v0.0.1
+    environment:
+      - PORT=8505
+    depends_on:
+      - app
+  my_sql:
+    container_name: brain_tumor_detection_database
+    image: mysql:8.0.33-debian
+    cap_add:
+      - SYS_NICE
+    restart: always
+    environment:
+      - MYSQL_DATABASE='railway'
+      - MYSQL_ROOT_PASSWORD='GMX6dkHxe8knAIM3CM1W'
+    ports:
+      - 3306:7390
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d
+  phpmyadmin:
+    container_name: brain_tumor_detection_database_client
+    image: phpmyadmin:5.2.1
+    ports:
+      - 8081:80
+    environment:
+      - PMA_ARBITRARY=1
+    depends_on:
+      - my_sql
