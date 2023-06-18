@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Date, ForeignKey, Integer, String
+from sqlalchemy import Column, Date, Float, ForeignKey, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
@@ -25,6 +25,8 @@ class Doctor(Base):
     user_id = Column(Integer, ForeignKey("users.id"))
     user = relationship("User", back_populates="doctors")
 
+    diagnostics = relationship("Diagnostic", back_populates="doctor")
+
 class Patient(Base):
     __tablename__ = "patients"
 
@@ -35,3 +37,21 @@ class Patient(Base):
     birthday = Column(Date)
     email = Column(String, unique=True, index=True)
     country = Column(String)
+
+    diagnostics = relationship("Diagnostic", back_populates="patient")
+
+class Diagnostic(Base):
+    __tablename__ = "diagnostics"
+
+    id = Column(Integer, primary_key=True, index=True)
+    image_url = Column(String)
+    positive_probability = Column(Float)
+    negative_probability = Column(Float)
+    result_by_doctor = Column(Integer)
+    created_at = Column(Date)
+
+    doctor_id = Column(Integer, ForeignKey("doctors.id"))
+    doctor = relationship("Doctor", back_populates="diagnostics")
+
+    patient_id = Column(Integer, ForeignKey("patients.id"))
+    patient = relationship("Patient", back_populates="diagnostics")

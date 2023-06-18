@@ -8,7 +8,6 @@ from app.services.patients import PatientService
 
 
 router = APIRouter()
-add_pagination(router)
 
 @router.post("/api/v1/patients", summary="Use it to create a new patient for a MRI", tags=["Patients"])
 async def create_patient(create_patient_dto: CreatePatientDto, user: User = Depends(get_current_user)):
