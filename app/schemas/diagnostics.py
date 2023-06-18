@@ -15,3 +15,7 @@ class DiagnosticOut(BaseModel):
 
     class Config:
         orm_mode = True
+
+class UpdateDiagnosticDto(BaseModel):
+    is_approved: int
+    remark: str
