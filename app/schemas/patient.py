@@ -8,3 +8,15 @@ class CreatePatientDto(BaseModel):
     country: str
     email: str
     birthday: date
+
+class PatientOut(BaseModel):
+    first_name: str
+    last_name: str
+    birthday: date
+    email: str
+    id: int
+    gender: str
+    country: str
+
+    class Config:
+        orm_mode = True

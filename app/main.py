@@ -1,9 +1,11 @@
 from fastapi import  FastAPI
+from fastapi_pagination import add_pagination
 from app.controllers import auth, mailer, user, detection, patients
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 origins = ["*"]
+add_pagination(app)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -22,3 +24,5 @@ app.include_router(auth.router)
 app.include_router(detection.router)
 app.include_router(mailer.router)
 app.include_router(patients.router)
+
+add_pagination(app)
