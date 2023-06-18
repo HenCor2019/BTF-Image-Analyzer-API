@@ -17,3 +17,4 @@ sendgrid==6.10.0
 python-jose[cryptography]==3.3.0
 fastapi-pagination==0.12.4
 starlette<0.28.0,>=0.27.0
+cloudinary==1.33.0
