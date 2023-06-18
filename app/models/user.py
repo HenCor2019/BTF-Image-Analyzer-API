@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Date, Float, ForeignKey, Integer, String
+from sqlalchemy import Boolean, Column, Date, Float, ForeignKey, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
@@ -47,7 +47,7 @@ class Diagnostic(Base):
     image_url = Column(String)
     positive_probability = Column(Float)
     negative_probability = Column(Float)
-    result_by_doctor = Column(Integer)
+    result_by_doctor = Column(Boolean)
     remark = Column(String)
     created_at = Column(Date)
 

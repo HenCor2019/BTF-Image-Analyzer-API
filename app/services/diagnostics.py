@@ -18,12 +18,13 @@ class DiagnosticService():
                 detail="The diagnostic could not be found in our system, please try again or try again later",
             )
 
-        if diagnostic.doctor_id is not doctor_id:
+        if int(diagnostic.doctor_id) != int(doctor_id):
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="The diagnosis cannot be evaluated, it belongs to a different doctor, please try again or try again later",
             )
 
         diagnostic.remark = update_diagnostic_dto.remark
-        diagnostic.result_by_doctor = 1 if update_diagnostic_dto.is_approved is True else 0
+        diagnostic.result_by_doctor = update_diagnostic_dto.is_approved is 1
+        self.db.commit()
         self.db.refresh(diagnostic)
