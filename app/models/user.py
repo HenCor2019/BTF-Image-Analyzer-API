@@ -1,4 +1,4 @@
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import Column, Date, ForeignKey, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
@@ -24,3 +24,14 @@ class Doctor(Base):
 
     user_id = Column(Integer, ForeignKey("users.id"))
     user = relationship("User", back_populates="doctors")
+
+class Patient(Base):
+    __tablename__ = "patients"
+
+    id = Column(Integer, primary_key=True, index=True)
+    first_name = Column(String, unique=True, index=True)
+    last_name = Column(String)
+    gender = Column(String)
+    birthday = Column(Date)
+    email = Column(String, unique=True, index=True)
+    country = Column(String)

@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
-from app.auth.auth_bearer_refresh import JWTRefreshBearer
 from app.auth.deps import get_current_user, get_refresh_user
 from app.models.user import Doctor, User
 
