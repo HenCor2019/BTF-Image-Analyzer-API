@@ -14,3 +14,4 @@ passlib[bcrypt]==1.7.4
 bcrypt==3.2.0
 sqlalchemy==2.0.14
 sendgrid==6.10.0
+python-jose[cryptography]==3.3.0

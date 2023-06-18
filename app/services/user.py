@@ -1,6 +1,7 @@
 from app.schemas import user as schemas
 from app.models import user as models
 from app.database import get_db
+from app.services.doctors import DoctorService
 from app.utils.hash import get_password_hash
 
 class UserService():
@@ -15,6 +16,7 @@ class UserService():
         self.db.add(db_user)
         self.db.commit()
         self.db.refresh(db_user)
+        DoctorService().create_doctor(user, db_user.id)
         return db_user
 
     def get_users(self, skip: int = 0, limit: int = 100):

@@ -1,16 +1,16 @@
 from fastapi import APIRouter, UploadFile, File, Depends
 from fastapi.responses import JSONResponse
-from python_http_client import ServiceUnavailableError
 import requests
 import json
-from app.auth.auth_bearer import JWTBearer
+from app.auth.deps import get_current_user
 from app.constants.tensorflow_url import DETECTION_MODEL_BASE_URL, MRI_VALIDATION_THRESHOLD, VALIDATION_MODEL_BASE_URL
+from app.models.user import User
 from app.utils.image_processing import read_image_from_file
 
 router = APIRouter()
 
-@router.post("/{id}/analyze", dependencies=[Depends(JWTBearer())], tags=["Diagnostics"])
-async def analyze_image(userId: str, file: UploadFile = File(default=None)):
+@router.post("/api/v1/analyze", summary="Use it to get an image predictions", tags=["Diagnostics"])
+async def analyze_image(user: User = Depends(get_current_user), file: UploadFile = File(default=None)):
     try:
         normalized_image = await read_image_from_file(file)
 
@@ -29,10 +29,13 @@ async def analyze_image(userId: str, file: UploadFile = File(default=None)):
             content={'tumor_detection':{'no_tumor':predictions[0],'tumor':predictions[1]}}
         )
     except:
-        raise ServiceUnavailableError("Cannot analyze image")
+        return JSONResponse(
+            status_code=400,
+            content={'message': 'Prediction failed'}
+        )
 
-@router.post("/{id}/validate", dependencies=[Depends(JWTBearer())], tags=["Diagnostics"])
-async def validate_image(userId: str, file: UploadFile = File(default=None)):
+@router.post("/api/v1/validate", summary="Use it to validate an image", tags=["Diagnostics"])
+async def validate_image(user: User = Depends(get_current_user), file: UploadFile = File(default=None)):
     try:
         normalized_image = await read_image_from_file(file)
 
