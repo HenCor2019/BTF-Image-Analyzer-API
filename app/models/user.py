@@ -48,6 +48,7 @@ class Diagnostic(Base):
     positive_probability = Column(Float)
     negative_probability = Column(Float)
     result_by_doctor = Column(Integer)
+    remark = Column(String)
     created_at = Column(Date)
 
     doctor_id = Column(Integer, ForeignKey("doctors.id"))
