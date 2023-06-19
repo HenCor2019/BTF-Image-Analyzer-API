@@ -1,10 +1,11 @@
-from fastapi import APIRouter, FastAPI, Depends
-from app.auth.auth_bearer import JWTBearer
-from app.controllers import auth, mailer, user, detection
+from fastapi import  FastAPI
+from fastapi_pagination import add_pagination
+from app.controllers import auth, mailer, user, detection, patients, diagnostics
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 origins = ["*"]
+add_pagination(app)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -14,16 +15,15 @@ app.add_middleware(
 )
 
 # Status route
-@app.get("/status")
+@app.get("/status", tags=["Health check"])
 async def ok():
     return {"status": "ok"}
-
-# Protected route
-@app.get("/protected", dependencies=[Depends(JWTBearer())])
-async def protected_route():
-    return {"message": "This is a protected route, if you see this you are authorized"}
 
 app.include_router(user.router)
 app.include_router(auth.router)
 app.include_router(detection.router)
 app.include_router(mailer.router)
+app.include_router(patients.router)
+app.include_router(diagnostics.router)
+
+add_pagination(app)
