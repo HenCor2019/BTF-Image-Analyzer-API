@@ -1,5 +1,6 @@
 from datetime import date
-from pydantic import BaseModel
+from typing import Literal
+from pydantic import BaseModel, Field
 
 from app.schemas.patient import PatientOut
 
@@ -17,5 +18,5 @@ class DiagnosticOut(BaseModel):
         orm_mode = True
 
 class UpdateDiagnosticDto(BaseModel):
-    is_approved: int
+    is_approved: Literal[0, 1]
     remark: str

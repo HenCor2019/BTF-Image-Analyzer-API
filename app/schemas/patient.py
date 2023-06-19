@@ -1,10 +1,11 @@
 from datetime import date
-from pydantic import BaseModel, Field
+from typing import Literal
+from pydantic import BaseModel
 
 class CreatePatientDto(BaseModel):
     first_name: str
     last_name: str
-    gender: str = Field(default=None, max_length=2)
+    gender: Literal["F", "M"]
     country: str
     email: str
     birthday: date
