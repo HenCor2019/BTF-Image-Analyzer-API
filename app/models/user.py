@@ -47,9 +47,9 @@ class Diagnostic(Base):
     image_url = Column(String)
     positive_probability = Column(Float)
     negative_probability = Column(Float)
-    result_by_doctor = Column(Boolean)
-    remark = Column(String)
+    result_by_doctor = Column(Integer)
     created_at = Column(Date)
+    remark = Column(String)
 
     doctor_id = Column(Integer, ForeignKey("doctors.id"))
     doctor = relationship("Doctor", back_populates="diagnostics")

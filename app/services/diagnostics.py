@@ -42,6 +42,6 @@ class DiagnosticService():
             )
 
         diagnostic.remark = update_diagnostic_dto.remark
-        diagnostic.result_by_doctor = update_diagnostic_dto.is_approved == 1
+        diagnostic.result_by_doctor = update_diagnostic_dto.is_approved
         self.db.commit()
         self.db.refresh(diagnostic)

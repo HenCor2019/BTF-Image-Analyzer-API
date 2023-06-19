@@ -6,6 +6,9 @@ class PatientService():
     def __init__(self):
         self.db = get_db()
 
+    def find_by_id(self, patient_id: str):
+        return self.db.query(models.Patient).filter(models.Patient.id == patient_id).first()
+
     def create_patient(self, patient: CreatePatientDto):
         db_patient = models.Patient(
             first_name=patient.first_name,

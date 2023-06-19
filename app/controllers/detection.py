@@ -1,15 +1,16 @@
-from fastapi import APIRouter, UploadFile, File, Depends
+from fastapi import APIRouter, HTTPException, UploadFile, File, Depends, status
 from fastapi.responses import JSONResponse
 from pydantic import ValidationError
 import requests
 import json
 
-from sqlalchemy import except_
+from requests.models import HTTPError
+
 from app.auth.deps import get_current_user
 from app.constants.tensorflow_url import DETECTION_MODEL_BASE_URL, MRI_VALIDATION_THRESHOLD, VALIDATION_MODEL_BASE_URL
-from app.libs.uploader import upload_image
 from app.models.user import Doctor, User
 from app.services.diagnostics import DiagnosticService
+from app.services.patients import PatientService
 from app.utils.image_processing import read_image_from_file
 
 import cloudinary
@@ -26,11 +27,14 @@ async def analyze_image(
         user: User = Depends(get_current_user)):
     try:
         doctor: Doctor = user.doctors[0]
-        normalized_image = await read_image_from_file(file)
-        await file.seek(0)
-        result = cloudinary.uploader.upload(file.file)
-        src_url = result.get("url")
+        patient = PatientService().find_by_id(patient_id)
+        if patient is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="The patient could not be found in our system, please try again or try later.",
+            )
 
+        normalized_image = await read_image_from_file(file)
         instances = normalized_image.reshape((1,)+normalized_image.shape).tolist()
         request_json = json.dumps({
              "signature_name": "serving_default",
@@ -41,12 +45,15 @@ async def analyze_image(
         response = response.json()
 
         predictions = response['predictions'][0]
+        await file.seek(0)
+        result = cloudinary.uploader.upload(file.file)
+        src_url = result.get("url")
         DiagnosticService().create_one(doctor.id,patient_id, src_url, predictions[1], predictions[0])
         return JSONResponse(
             status_code=200,
             content={'tumor_detection': {'no_tumor': predictions[0], 'tumor': predictions[1]}}
         )
-    except (ValidationError):
+    except (ValidationError, HTTPError):
         return JSONResponse(
             status_code=400,
             content={'tumor_detection': {'no_tumor': -1, 'tumor': -1}}
