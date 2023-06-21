@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException, UploadFile, File, Depends, status
+from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from pydantic import ValidationError
 import requests
@@ -50,15 +51,15 @@ async def analyze_image(
         await file.seek(0)
         result = cloudinary.uploader.upload(file.file)
         src_url = result.get("url")
-        DiagnosticService().create_one(doctor.id, patient_id, src_url, predictions[1], predictions[0])
+        diagnostic = DiagnosticService().create_one(doctor.id, patient_id, src_url, predictions[1], predictions[0])
         return JSONResponse(
             status_code=200,
-            content={'tumor_detection': {'no_tumor': predictions[0], 'tumor': predictions[1]}}
+            content={'success': True, 'content': jsonable_encoder(diagnostic)}
         )
     except (ValidationError, HTTPError):
         return JSONResponse(
             status_code=400,
-            content={'tumor_detection': {'no_tumor': -1, 'tumor': -1}}
+            content={'success': False, 'content': None}
         )
 
 
