@@ -1,10 +1,7 @@
-from fastapi import APIRouter, Depends
-from python_http_client import os
+from fastapi import APIRouter
 from starlette.responses import JSONResponse
-from app.auth.deps import get_current_user
 
 from app.libs.mailer import send_mail
-from app.models.user import User
 from app.schemas.mailer import CreateMailDto
 
 
@@ -16,4 +13,4 @@ async def contact_with_us(create_mail: CreateMailDto):
         await send_mail(create_mail)
         return JSONResponse(status_code=200, content={'success': True})
     except:
-        return JSONResponse(status_code=400, content={'success': False})
+        return JSONResponse(status_code=200, content={'success': False})
