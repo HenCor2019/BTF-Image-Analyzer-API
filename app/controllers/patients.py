@@ -14,7 +14,7 @@ async def create_patient(create_patient_dto: CreatePatientDto, user: User = Depe
     db_patient = PatientService().create_patient(create_patient_dto)
     return db_patient
 
-@router.get("/api/v1/patients/search", summary="Use it to search a top five based on email", tags=["Patients"])
+@router.get("/api/v1/patients/search", summary="Use it to search a top five based on first name", tags=["Patients"])
 async def search_top_five(q: str, user: User = Depends(get_current_user)):
     db_patients = PatientService().search_top_five(q)
     return db_patients
