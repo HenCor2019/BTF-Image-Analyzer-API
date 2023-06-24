@@ -11,6 +11,7 @@ class DiagnosticOut(BaseModel):
     negative_probability: float
     result_by_doctor: int
     created_at: date
+    remark: str
 
     patient: PatientOut
 
