@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends
+from fastapi.encoders import jsonable_encoder
 from fastapi_pagination import LimitOffsetPage, add_pagination, paginate
 from starlette.responses import JSONResponse
 from app.auth.deps import get_current_user
@@ -24,7 +25,7 @@ async def create_patient(
             content={
                 'success': True,
                 'message': message,
-                'patient': db_patient
+                'patient': jsonable_encoder(db_patient)
             })
     except:
         message = get_fail_patient_message(lan)
