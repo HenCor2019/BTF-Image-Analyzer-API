@@ -24,12 +24,12 @@ async def evaluate(diagnostic_id: str, update_dto: UpdateDiagnosticDto, user: Us
         DiagnosticService().evaluate(doctor.id, diagnostic_id, update_dto, lan)
         message = get_success_diagnostic_message(lan)
         return JSONResponse(
-            status_code=400,
-            content={'is_valid_mri_image': False, 'percentage': -1, 'message': message}
+            status_code=200,
+            content={'message': message}
         )
     except:
         message = get_fail_diagnostic_message(lan)
         return JSONResponse(
             status_code=400,
-            content={'is_valid_mri_image': False, 'percentage': -1, 'message': message}
+            content={'message': message}
         )
