@@ -16,4 +16,4 @@ async def contact_with_us(create_mail: CreateMailDto, lan: str = "en"):
         return JSONResponse(status_code=200, content={'success': True, 'message': message})
     except:
         message = get_fail_mailer_message(lan)
-        return JSONResponse(status_code=200, content={'success': False, 'message': message})
+        return JSONResponse(status_code=400, content={'success': False, 'message': message})
