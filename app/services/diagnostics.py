@@ -3,6 +3,7 @@ from fastapi import HTTPException, status
 from app import models
 from app.database import get_db
 from app.schemas.diagnostics import UpdateDiagnosticDto
+from app.utils.non_found import get_forbidden_diagnostic_message, get_non_found_diagnostic_message
 
 class DiagnosticService():
     def __init__(self):
@@ -27,18 +28,20 @@ class DiagnosticService():
     def find_all(self, doctor_id: int, name: str):
         return self.db.query(models.Diagnostic).filter(models.Diagnostic.doctor_id == doctor_id).all()
 
-    def evaluate(self, doctor_id: int, diagnostic_id: str, update_diagnostic_dto: UpdateDiagnosticDto):
+    def evaluate(self, doctor_id: int, diagnostic_id: str, update_diagnostic_dto: UpdateDiagnosticDto, lan: str):
         diagnostic = self.db.query(models.Diagnostic).filter(models.Diagnostic.id == diagnostic_id).first()
         if diagnostic is None:
+            message = get_non_found_diagnostic_message(lan)
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="The diagnostic could not be found in our system, please try again or try again later",
+                detail=message,
             )
 
         if int(diagnostic.doctor_id) != int(doctor_id):
+            message = get_forbidden_diagnostic_message(lan)
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail="The diagnosis cannot be evaluated, it belongs to a different doctor, please try again or try again later",
+                detail=message,
             )
 
         diagnostic.remark = update_diagnostic_dto.remark

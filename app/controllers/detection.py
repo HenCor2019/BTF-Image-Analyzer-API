@@ -18,6 +18,9 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 
+from app.utils.non_found import get_non_found_patient_message
+from app.utils.success_messages import get_fail_diagnostic_message, get_success_diagnostic_message
+
 config = cloudinary.config(secure=True)
 
 router = APIRouter()
@@ -27,14 +30,16 @@ router = APIRouter()
 async def analyze_image(
         patient_id: str,
         file: UploadFile = File(...),
-        user: User = Depends(get_current_user)):
+        user: User = Depends(get_current_user),
+        lan: str = "en"):
     try:
         doctor: Doctor = user.doctors[0]
         patient = PatientService().find_by_id(patient_id)
         if patient is None:
+            message = get_non_found_patient_message(lan)
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="The patient could not be found in our system, please try again or try later.",
+                detail=message,
             )
 
         normalized_image = await read_image_from_file(file)
@@ -52,14 +57,20 @@ async def analyze_image(
         result = cloudinary.uploader.upload(file.file)
         src_url = result.get("url")
         diagnostic = DiagnosticService().create_one(doctor.id, patient_id, src_url, predictions[1], predictions[0])
+        message = get_success_diagnostic_message(lan)
         return JSONResponse(
             status_code=200,
-            content={'success': True, 'content': jsonable_encoder(diagnostic)}
+            content={
+                'success': True,
+                'content': jsonable_encoder(diagnostic),
+                'message': message
+            }
         )
     except (ValidationError, HTTPError):
+        message = get_fail_diagnostic_message(lan)
         return JSONResponse(
             status_code=400,
-            content={'success': False, 'content': None}
+            content={'success': False, 'content': None, 'message': message}
         )
 
 
