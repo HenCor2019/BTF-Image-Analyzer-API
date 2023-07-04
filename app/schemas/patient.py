@@ -1,6 +1,6 @@
 from datetime import date
 from typing import Literal
-from pydantic import BaseModel
+from pydantic import BaseModel, validator
 
 class CreatePatientDto(BaseModel):
     first_name: str
@@ -9,6 +9,12 @@ class CreatePatientDto(BaseModel):
     country: str
     email: str
     birthday: date
+
+    @validator("birthday")
+    def validate_dob(cls, v, values, **kwargs):
+        if v > date.today():
+            raise ValueError("The date must be lower than today")
+        return v
 
 class PatientOut(BaseModel):
     first_name: str

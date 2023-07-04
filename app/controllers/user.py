@@ -10,7 +10,7 @@ router = APIRouter()
 
 @router.post("/api/v1/sign-up", tags=["Users"])
 def create_user(user: UserCreate, lan: str = "en"):
-    db_user = UserService().create_user(user)
+    db_user = UserService().create_user(user, lan)
     return db_user
 
 @router.get("/api/v1/users", response_model=List[User], tags=["Users"])
