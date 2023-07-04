@@ -17,25 +17,15 @@ async def create_patient(
         create_patient_dto: CreatePatientDto,
         user: User = Depends(get_current_user),
         lan: str = "en"):
-    try:
-        db_patient = PatientService().create_patient(create_patient_dto)
-        message = get_success_patient_message(lan)
-        return JSONResponse(
-            status_code=200,
-            content={
-                'success': True,
-                'message': message,
-                'patient': jsonable_encoder(db_patient)
-            })
-    except:
-        message = get_fail_patient_message(lan)
-        return JSONResponse(
-            status_code=400,
-            content={
-                'success': True,
-                'message': message,
-                'patient': None
-            })
+    db_patient = PatientService().create_patient(create_patient_dto, lan)
+    message = get_success_patient_message(lan)
+    return JSONResponse(
+        status_code=200,
+        content={
+            'success': True,
+            'message': message,
+            'patient': jsonable_encoder(db_patient)
+        })
 
 @router.get("/api/v1/patients/search", summary="Use it to search a top five based on first name", tags=["Patients"])
 async def search_top_five(q: str, user: User = Depends(get_current_user)):

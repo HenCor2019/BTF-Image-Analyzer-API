@@ -75,3 +75,21 @@ def get_forbidden_diagnostic_message(lan: str) -> str:
         return "El diagnostico no puede ser evaluado, no posees este diagnostico asignado."
 
     return "The diagnosis cannot be evaluated, it belongs to a different doctor, please try again."
+
+def get_repeated_email_message(lan: str) -> str:
+    if lan == "en":
+        return "The email received is not allowed to be used, please try with a different email."
+
+    if lan == "es":
+        return "El correo recibido no se encuentra disponible, por favor intenta con un correo diferente."
+
+    return "The email received is not allowed to be used, please try with a different email."
+
+def get_repeated_carnet_message(lan: str) -> str:
+    if lan == "en":
+        return "The carnet received is not allowed to be used, please try with a different carnet."
+
+    if lan == "es":
+        return "El carnet recibido no se encuentra disponible, por favor intenta con un carnet diferente."
+
+    return "The carnet received is not allowed to be used, please try with a different carnet."
