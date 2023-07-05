@@ -11,7 +11,7 @@ class PatientService():
     def find_by_id(self, patient_id: str):
         return self.db.query(models.Patient).filter(models.Patient.id == patient_id).first()
 
-    def create_patient(self, patient: CreatePatientDto, lan: str):
+    def create_patient(self, patient: CreatePatientDto, lan: str, doctorId: int):
         repeated_patient = self.db.query(models.Patient).filter(models.Patient.email == patient.email).first()
         if repeated_patient is not None:
             message = get_repeated_email_message(lan)
@@ -25,7 +25,8 @@ class PatientService():
             country=patient.country,
             email=patient.email,
             birthday=patient.birthday,
-            gender=patient.gender
+            gender=patient.gender,
+            doctor_id=doctorId
         )
         self.db.add(db_patient)
         self.db.commit()
@@ -33,7 +34,7 @@ class PatientService():
         return db_patient
 
     def search_top_five(self, q: str, doctorId: str):
-        return self.db.query(models.Patient).join(models.Diagnostic).filter(models.Diagnostic.doctor_id == doctorId).filter(models.Patient.first_name.contains(q)).limit(5).all()
+        return self.db.query(models.Patient).filter(models.Patient.doctor_id == doctorId).filter(models.Patient.first_name.contains(q)).limit(5).all()
 
     def find_all(self, doctorId: str):
-        return self.db.query(models.Patient).join(models.Diagnostic).filter(models.Diagnostic.doctor_id == doctorId).all()
+        return self.db.query(models.Patient).filter(models.Patient.doctor_id == doctorId).all()

@@ -17,7 +17,7 @@ async def create_patient(
         create_patient_dto: CreatePatientDto,
         user: User = Depends(get_current_user),
         lan: str = "en"):
-    db_patient = PatientService().create_patient(create_patient_dto, lan)
+    db_patient = PatientService().create_patient(create_patient_dto, lan, user.id)
     message = get_success_patient_message(lan)
     return JSONResponse(
         status_code=200,
