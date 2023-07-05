@@ -34,5 +34,5 @@ async def search_top_five(q: str, user: User = Depends(get_current_user)):
 
 @router.get("/api/v1/patients", summary="Use it search all patients", tags=["Patients"], response_model=LimitOffsetPage[PatientOut])
 async def get_all(user: User = Depends(get_current_user)):
-    db_patients = PatientService().find_all()
+    db_patients = PatientService().find_all(user.id)
     return paginate(db_patients)
