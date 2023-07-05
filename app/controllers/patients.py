@@ -29,7 +29,7 @@ async def create_patient(
 
 @router.get("/api/v1/patients/search", summary="Use it to search a top five based on first name", tags=["Patients"])
 async def search_top_five(q: str, user: User = Depends(get_current_user)):
-    db_patients = PatientService().search_top_five(q)
+    db_patients = PatientService().search_top_five(q, user.id)
     return db_patients
 
 @router.get("/api/v1/patients", summary="Use it search all patients", tags=["Patients"], response_model=LimitOffsetPage[PatientOut])
