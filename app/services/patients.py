@@ -33,7 +33,7 @@ class PatientService():
         self.db.refresh(db_patient)
         return db_patient
 
-    def search_top_five(self, q: str, doctorId: str):
+    def find_all(self, q: str, doctorId: str):
         return self.db.query(models.Patient).filter(models.Patient.doctor_id == doctorId).all()
 
     def search_top_five(self, q: str, doctorId: str):
