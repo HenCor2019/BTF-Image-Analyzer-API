@@ -39,6 +39,8 @@ class Patient(Base):
     birthday = Column(Date)
     email = Column(String, unique=True, index=True)
     country = Column(String)
+    doctor_id = Column(Integer, ForeignKey("doctors.id"))
+    doctor = relationship("Doctor", back_populates="patients")
 
     diagnostics = relationship("Diagnostic", back_populates="patient")
 
