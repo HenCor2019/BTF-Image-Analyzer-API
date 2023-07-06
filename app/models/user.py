@@ -26,6 +26,7 @@ class Doctor(Base):
     user = relationship("User", back_populates="doctors")
 
     diagnostics = relationship("Diagnostic", back_populates="doctor")
+    patients = relationship("Patient", back_populates="doctor")
 
     created_date = Column(Date)
 
