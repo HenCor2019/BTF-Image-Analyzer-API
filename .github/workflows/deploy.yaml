@@ -7,9 +7,6 @@ on:
     branches: [ "develop" ]
     types: [opened,edited,synchronize]
 
-permissions:
-  contents: read
-
 jobs:
   check_skip:
     runs-on: ubuntu-18.04
